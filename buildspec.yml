@@ -1,6 +1,28 @@
 version: 0.2
 
 phases:
+  install:
+    runtime-versions:
+      java: corretto8
+  pre_build:
+    commands:
+      - echo installing maven...
+      - apt-get update -y
+      - apt-get install -y maven
   build:
     commands:
-      - echo "hello world"
+      - echo Build started on `date`
+      - mvn clean install -P dev
+      - ls -ltr
+  post_build:
+    commands:
+      - echo Build completed on `date`
+artifacts:
+  files:
+    - target/Services-RFT-Creation-0.0.1-SNAPSHOT.jar
+    - appspec.yml
+    - scripts/*
+  discard-paths: yes
+cache:
+    paths:
+    - '/root/.m2/**/*'
